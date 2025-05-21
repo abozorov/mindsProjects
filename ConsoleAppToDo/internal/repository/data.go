@@ -6,19 +6,19 @@ import (
 )
 
 // var data map[int]*models.ToDo = make(map[int]*models.ToDo)
-var data map[int]*models.ToDo = map[int]*models.ToDo {
+var data map[int]*models.ToDo = map[int]*models.ToDo{
 	1: {
-		ID: 1,
+		ID:        1,
 		CreatedAt: time.Date(2025, time.May, 12, 18, 13, 0, 0, time.Local),
-		TaskName: "Выбросить мусор",
-		Text: "Попросили выбросить мусор",
-	}, 
+		TaskName:  "Выбросить мусор",
+		Text:      "Попросили выбросить мусор",
+	},
 	2: {
-		ID:         2,
-		CreatedAt:  time.Now().AddDate(0, 0, -9),
+		ID:        2,
+		CreatedAt: time.Now().AddDate(0, 0, -9),
 		// CompleteAt: time.Now().AddDate(0, 0, -7),
-		TaskName:   "Clean apartment",
-		Text:       "Vacuum, mop floors, clean windows.",
+		TaskName: "Clean apartment",
+		Text:     "Vacuum, mop floors, clean windows.",
 	},
 	3: {
 		ID:         3,
@@ -35,11 +35,11 @@ var data map[int]*models.ToDo = map[int]*models.ToDo {
 		Text:       "Fix the leaking kitchen tap.",
 	},
 	5: {
-		ID:         5,
-		CreatedAt:  time.Now().AddDate(0, 0, -6),
+		ID:        5,
+		CreatedAt: time.Now().AddDate(0, 0, -6),
 		// CompleteAt: time.Now().AddDate(0, 0, -4),
-		TaskName:   "Write blog post",
-		Text:       "Finish article about Go routines.",
+		TaskName: "Write blog post",
+		Text:     "Finish article about Go routines.",
 	},
 	6: {
 		ID:         6,
@@ -77,10 +77,10 @@ var data map[int]*models.ToDo = map[int]*models.ToDo {
 		Text:       "Buy fruits, vegetables, and snacks.",
 	},
 	11: {
-		ID:         11,
-		CreatedAt:  time.Now().AddDate(0, 0, -10),
+		ID:        11,
+		CreatedAt: time.Now().AddDate(0, 0, -10),
 		// CompleteAt: time.Now().AddDate(0, 0, -8),
-		TaskName:   "Buy groceries",
-		Text:       "Milk, eggs, bread, and coffee from the supermarket.",
+		TaskName: "Buy groceries",
+		Text:     "Milk, eggs, bread, and coffee from the supermarket.",
 	},
 }

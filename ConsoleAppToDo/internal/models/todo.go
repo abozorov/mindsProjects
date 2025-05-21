@@ -9,18 +9,18 @@ type ToDo struct {
 	CompleteAt time.Time
 	Deadline   time.Time
 	Priority   Priority
-	TaskName   string
-	Text       string
+	TaskName   string `json:"taskName"`
+	Text       string `json:"text"`
 }
 
 func NewToDo(id int, taskName, text string) *ToDo {
-	return &ToDo {
-		ID: id, // Тут можно пошуримурить с ID
+	return &ToDo{
+		ID:        id, // Тут можно пошуримурить с ID
 		CreatedAt: time.Now(),
 		// CompleteAt: time.Time{},
 		// Deadline: time.Time{},
 		// Priority: Priority{},
 		TaskName: taskName,
-		Text: text,
+		Text:     text,
 	}
 }

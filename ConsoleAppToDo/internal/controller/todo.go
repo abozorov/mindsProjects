@@ -3,141 +3,103 @@ package controller
 import (
 	"ConsoleAppToDo/internal/models"
 	"ConsoleAppToDo/internal/service"
-	"bufio"
+	"encoding/json"
 	"fmt"
-	"os"
-	"strings"
+	"net/http"
+	"strconv"
 )
 
-func printToDo(t models.ToDo) {
-	fmt.Printf("Task#%d - %s\nText: %s\nCreated: %s\n",
-		t.ID,
-		t.TaskName,
-		t.Text,
-		t.CreatedAt.Format("02-Jan-2006, 15:04"),
+func LoadToDo(w http.ResponseWriter, r *http.Request) {
+	// достать из БД и отфильтровать если надо
+	var (
+		toDoList   []models.ToDo
+		err        error
+		allToDo    string = r.URL.Query().Get("all")
+		isComplete string = r.URL.Query().Get("iscomplete")
 	)
-	if t.CompleteAt.IsZero() {
-		fmt.Println("Задача пока не выполнена!\n____________")
+
+	if allToDo == "true" && len(r.URL.Query()) == 1 {
+		toDoList, err = service.LoadAllToDo()
+
+	} else if allToDo == "false" && isComplete == "true" {
+		toDoList, err = service.Filter(true)
+
+	} else if allToDo == "false" && isComplete == "false" {
+		toDoList, err = service.Filter(false)
+
 	} else {
-		fmt.Printf("Complete time: %s\n____________\n",
-			t.CompleteAt.Format("02-Jan-2006, 15:04"),
-		)
+		http.Error(w, "Invalid queries", http.StatusBadRequest)
+		return
 	}
+
+	if err != nil {
+		fmt.Fprintln(w, "Произошла ошибка по причине: ", err)
+		return
+	}
+
+	// отправить все туду
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(toDoList)
 }
 
-func CreateToDo() {
+func CreateToDo(w http.ResponseWriter, r *http.Request) {
 	// получить название задачи
-	fmt.Println("Введите название задачи!")
-	reader := bufio.NewReader(os.Stdin)
-	taskName, _ := reader.ReadString('\n')
-	taskName = strings.TrimSpace(taskName)
+	var todo models.ToDo
 
-	// получитьт текст задачи
-	fmt.Println("Введите описание к задаче!")
-	task, _ := reader.ReadString('\n')
-	task = strings.TrimSpace(task)
-
+	if err := json.NewDecoder(r.Body).Decode(&todo); err != nil {
+		http.Error(w, "Неверный JSON", http.StatusBadRequest)
+		return
+	}
 	// (допы) получить приоритет задачи
 
 	// (допы) срок в днях
 
 	// добавить в бд
-	service.CreateToDo(taskName, task)
-	fmt.Println("Задача успешно создана")
+	service.CreateToDo(todo.TaskName, todo.Text)
+	fmt.Fprintln(w, "Задача успешно создана")
 }
 
-func LoadAllToDo() {
-	// достать из БД
-	toDoList, err := service.LoadAllToDo()
+func DoneToDo(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
-		fmt.Println("Произошла ошибка по причине: ", err)
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
-
-	// вывести все туду
-	for _, v := range toDoList {
-		printToDo(v)
-	}
-}
-
-func Filter(isComplete bool) {
-	// достать отсортированное
-	filter, err := service.Filter(isComplete)
-	if err != nil {
-		fmt.Println("Произошла ошибка по причине: ", err)
-		return
-	}
-
-	// вывести пользователю
-	if isComplete {
-		fmt.Println("Выполненные задачи!")
-	} else {
-		fmt.Println("Невыполненные задачи!")
-	}
-	for _, v := range filter {
-		printToDo(v)
-	}
-}
-
-func DoneToDo() {
-	// достать и показать незвершенные
-	filter, err := service.Filter(false)
-	if err != nil {
-		fmt.Println("Произошла ошибка по причине: ", err)
-		return
-	}
-	fmt.Println("Список невыполненных задач!")
-	for _, v := range filter {
-		printToDo(v)
-	}
-
-	// получить id которую надо завершить
-	fmt.Println("Введите ID задачи")
-	var id int
-	fmt.Scan(&id)
 
 	// отправить запросс для завершения
 	if id <= 0 {
-		fmt.Println("ID не может быть отрицательным или равным 0.\nПосмотрите список повнимательнее")
+		http.Error(w, "D не может быть отрицательным или равным 0", http.StatusBadRequest)
 		return
 	}
 	err = service.DoneToDo(id)
 
 	// ответ клиенту
 	if err != nil {
-		fmt.Println("Произошла ошибка по причине: ", err)
+		fmt.Fprintln(w, "Произошла ошибка по причине: ", err)
 		return
 	}
-	fmt.Printf("Задача %d успешно выполненв!\n", id)
+	fmt.Fprintf(w, "Задача %d успешно выполненв!\n", id)
 }
 
-func DeleteToDo() {
-	// вывести список c ID клиенту
-	toDoList, err := service.LoadAllToDo()
+func DeleteToDo(w http.ResponseWriter, r *http.Request) {
+	// получить id для удаления
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
-		fmt.Println("Произошла ошибка по причине: ", err)
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
-	fmt.Println("Выберите ID для удаления из списка!")
-	for _, v := range toDoList {
-		printToDo(v)
-	}
 
-	// получить id для удаления
-	var id int
-	fmt.Scan(&id)
-
-	// запросс для удаления
+	// отправить запросс для удаления
 	if id <= 0 {
-		fmt.Println("ID не может быть отрицательным или равным 0.\nПосмотрите список повнимательнее")
+		http.Error(w, "D не может быть отрицательным или равным 0", http.StatusBadRequest)
 		return
 	}
 	err = service.DeleteToDo(id)
 
 	// ответ клиенту
 	if err != nil {
-		fmt.Println("Произошла ошибка по причине: ", err)
+		fmt.Fprintln(w, "Произошла ошибка по причине: ", err)
 		return
 	}
-	fmt.Printf("Задача %d успешно удалено!\n", id)
+	fmt.Fprintf(w, "Задача %d успешно удалено!\n", id)
 }

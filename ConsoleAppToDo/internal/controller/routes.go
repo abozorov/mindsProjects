@@ -1,6 +1,24 @@
 package controller
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
+
+func router(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		LoadToDo(w, r)
+	case http.MethodPost:
+		CreateToDo(w, r)
+	case http.MethodPut:
+		DoneToDo(w, r)
+	case http.MethodDelete:
+		DeleteToDo(w, r)
+	default:
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+	}
+}
 
 func Commands() {
 	commands := `
@@ -12,29 +30,12 @@ func Commands() {
 	4. Вывести невыполненные задачи
 	5. Выполнить задачу из списка невыполненных c ID
 	6. Удалить задачу с ID`
+	fmt.Println(commands)
 
-	for {
-		fmt.Println(commands)
-		var c string
-		fmt.Scanln(&c)
-		switch c {
-		case "0":
-			fmt.Println("До скорых встреч :D")
-			return
-		case "1":
-			CreateToDo()
-		case "2":
-			LoadAllToDo()
-		case "3":
-			Filter(true)
-		case "4":
-			Filter(false)
-		case "5":
-			DoneToDo()
-		case "6":
-			DeleteToDo()
-		default:
-			fmt.Println("Такой команды нет")
-		}
-	}
+	mux := http.NewServeMux()
+	mux.HandleFunc("/todo", router)
+	mux.HandleFunc("/", router)
+
+	http.ListenAndServe(":8080", mux)
+
 }
