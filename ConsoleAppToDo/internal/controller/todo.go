@@ -3,6 +3,7 @@ package controller
 import (
 	"ConsoleAppToDo/internal/models"
 	"ConsoleAppToDo/internal/service"
+	"ConsoleAppToDo/internal/errs"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -28,12 +29,12 @@ func LoadToDo(w http.ResponseWriter, r *http.Request) {
 		toDoList, err = service.Filter(false)
 
 	} else {
-		http.Error(w, "Invalid queries", http.StatusBadRequest)
+		http.Error(w, "Страница не найдена", http.StatusNotFound)
 		return
 	}
 
 	if err != nil {
-		fmt.Fprintln(w, "Произошла ошибка по причине: ", err)
+		http.Error(w, err.Error(), errs.HTTPErr[err])
 		return
 	}
 
@@ -56,49 +57,50 @@ func CreateToDo(w http.ResponseWriter, r *http.Request) {
 
 	// добавить в бд
 	service.CreateToDo(todo.TaskName, todo.Text)
+	w.WriteHeader(http.StatusCreated)
 	fmt.Fprintln(w, "Задача успешно создана")
 }
 
 func DoneToDo(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		http.Error(w, "Нет такого ID", http.StatusNotFound)
 		return
 	}
 
 	// отправить запросс для завершения
 	if id <= 0 {
-		http.Error(w, "D не может быть отрицательным или равным 0", http.StatusBadRequest)
+		http.Error(w, "Нет такого ID", http.StatusNotFound)
 		return
 	}
 	err = service.DoneToDo(id)
 
 	// ответ клиенту
 	if err != nil {
-		fmt.Fprintln(w, "Произошла ошибка по причине: ", err)
+		http.Error(w, err.Error(), errs.HTTPErr[err])
 		return
 	}
-	fmt.Fprintf(w, "Задача %d успешно выполненв!\n", id)
+	fmt.Fprintf(w, "Задача %d успешно выполнен!\n", id)
 }
 
 func DeleteToDo(w http.ResponseWriter, r *http.Request) {
 	// получить id для удаления
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		http.Error(w, "Нет такого ID", http.StatusNotFound)
 		return
 	}
 
 	// отправить запросс для удаления
 	if id <= 0 {
-		http.Error(w, "D не может быть отрицательным или равным 0", http.StatusBadRequest)
+		http.Error(w, "Нет такого ID", http.StatusNotFound)
 		return
 	}
 	err = service.DeleteToDo(id)
 
 	// ответ клиенту
 	if err != nil {
-		fmt.Fprintln(w, "Произошла ошибка по причине: ", err)
+		http.Error(w, err.Error(), errs.HTTPErr[err])
 		return
 	}
 	fmt.Fprintf(w, "Задача %d успешно удалено!\n", id)
