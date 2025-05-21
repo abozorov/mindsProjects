@@ -34,7 +34,6 @@ func Commands() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/todo", router)
-	mux.HandleFunc("/", router)
 
 	http.ListenAndServe(":8080", mux)
 
