@@ -14,7 +14,7 @@ func RunServer() error {
 
 	router.GET("/", Ping)
 
-	// аккаунт суперадмина создаем заранее 
+	// аккаунт суперадмина создаем заранее
 	router.POST("/sign-in", SignIn)
 
 	// только админ
@@ -45,7 +45,7 @@ func RunServer() error {
 	}
 
 	// любой авторизованный пользователь
-	counterpartyG := router.Group("/counterparty", CheckAuthorization)
+	counterpartyG := router.Group("/counterparties", CheckAuthorization)
 	{
 		counterpartyG.POST("", CreateCounterparty)
 		counterpartyG.GET("/:id", GetCounterpartyByID)

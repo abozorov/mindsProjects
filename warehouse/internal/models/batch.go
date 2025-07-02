@@ -3,10 +3,10 @@ package models
 import "time"
 
 type Batch struct {
-	ID               int       `json:"id"`                //
-	Date             time.Time `json:"Date"`              //
-	Type             string    `json:"type"`              //
-	CounterpartyName string    `json:"counterparty_name"` //
+	ID               int       `json:"id"`                                       //
+	Date             time.Time `json:"Date"`                                     //
+	Type             string    `json:"type"`                                     //
+	CounterpartyName string    `json:"counterparty_name" db:"counterparty_name"` //
 	Contact          string    `json:"contact"`
 	Phone            string    `json:"phone"`
 	Email            string    `json:"email"`

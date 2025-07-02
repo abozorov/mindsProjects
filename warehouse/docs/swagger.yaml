@@ -170,36 +170,6 @@ paths:
       summary: Проверка работоспособности сервера
       tags:
       - health
-  /auth/sign-in:
-    post:
-      consumes:
-      - application/json
-      description: Вход по логину и паролю
-      parameters:
-      - description: Учётные данные
-        in: body
-        name: credentials
-        required: true
-        schema:
-          $ref: '#/definitions/models.UserSignIn'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Авторизация пользователя
-      tags:
-      - auth
   /batches:
     get:
       description: Возвращает список всех партий в бд
@@ -764,6 +734,36 @@ paths:
       summary: Изменить товар
       tags:
       - products
+  /sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Вход по логину и паролю
+      parameters:
+      - description: Учётные данные
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSignIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Авторизация пользователя
+      tags:
+      - auth
   /storages:
     get:
       description: Возвращает список всех мест с товарами

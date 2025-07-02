@@ -20,7 +20,7 @@ func GetCellByAdressCode(adressCode string) (cell models.Cell, err error) {
 
 	return cell, nil
 }
-
+ 
 func CreateCell(cell models.Cell) (models.Cell, error) {
 	_, err := db.GetDBConn().Exec(`
 			INSERT INTO cells (zone, row, adress_code)

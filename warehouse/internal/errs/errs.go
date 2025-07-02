@@ -16,7 +16,7 @@ var (
 	ErrInvalidCharacter          = errors.New("invalid character")
 	ErrCounterpartyAlreadyExists = errors.New("counterparty already exists")
 	ErrCellAlreadyExists         = errors.New("cell already exists")
- 
+
 	// NotFound
 	ErrNotFound       = errors.New("not found")
 	ErrUserNotFound   = errors.New("user not found")
