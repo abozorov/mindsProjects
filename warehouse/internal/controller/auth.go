@@ -8,7 +8,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
+// SignIn godoc
+// @Summary Авторизация пользователя
+// @Description Вход по логину и паролю
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param credentials body models.UserSignIn true "Учётные данные"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Router /auth/sign-in [post]
 func SignIn(c *gin.Context) {
 	// получить идентификатор и пароль
 	var u models.UserSignIn

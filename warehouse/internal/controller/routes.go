@@ -5,6 +5,8 @@ import (
 	"warehouse/logger"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func RunServer() error {
@@ -65,6 +67,7 @@ func RunServer() error {
 		batchG.GET("/:id", GetBatchByID)
 		batchG.GET("", GetAllBatches)
 	}
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	if err := router.Run(configs.AppSettings.AppParams.PortRun); err != nil {
 		logger.Error.Printf("[controller] RunServer():  Error during running HTTP server: %s", err.Error())

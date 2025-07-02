@@ -12,6 +12,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// CreateCounterparty godoc
+// @Summary Создать контрагента
+// @Description Создает контрагента в базе
+// @Tags counterparties
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param user body models.PostCounterparty true "контрагент"
+// @Success 201 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Router /counterparties [post]
 func CreateCounterparty(c *gin.Context) {
 	// парсим в JSON
 	var cp models.Counterparty
@@ -47,6 +59,18 @@ func CreateCounterparty(c *gin.Context) {
 	c.JSON(http.StatusCreated, cp)
 }
 
+// GetCounterpartyByID godoc
+// @Summary Получить контрагента по ID
+// @Description Возвращает контрагента по его ID
+// @Tags counterparties
+// @Security ApiKeyAuth
+// @Produce json
+// @Param id path int true "ID контрагента"
+// @Success 200 {object} models.Counterparty
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /counterparties/{id} [get]
 func GetCounterpartyByID(c *gin.Context) {
 	// достаем id
 	idStr := c.Param("id")
@@ -68,6 +92,16 @@ func GetCounterpartyByID(c *gin.Context) {
 	c.JSON(http.StatusOK, cp)
 }
 
+// GetAllCounterparties godoc
+// @Summary Получить всех контрагентов
+// @Description Возвращает список всех контрагентов в бд
+// @Tags counterparties
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {array} models.Counterparty
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Router /counterparties [get]
 func GetAllCounterparties(c *gin.Context) {
 	// достаем данные с бд
 	cp, err := service.GetAllCounterparties()
@@ -80,6 +114,20 @@ func GetAllCounterparties(c *gin.Context) {
 	c.JSON(http.StatusOK, cp)
 }
 
+// UpdateCounterpartyByID godoc
+// @Summary Изменить контрагента
+// @Description Изменение данных контрагента
+// @Tags counterparties
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param id path int true "ID контрагента"
+// @Param operation body models.Counterparty true "контрагент"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /counterparties/{id} [patch]
 func UpdateCounterpartyByID(c *gin.Context) {
 	// достаем id
 	idStr := c.Param("id")

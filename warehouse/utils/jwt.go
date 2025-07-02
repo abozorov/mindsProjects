@@ -24,7 +24,7 @@ func GenerateToken(userID int, username, role string) (string, error) {
 		Username: username,
 		Role:     role,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: int64(time.Duration(configs.AppSettings.AuthParams.JwtTtlMinutes) * time.Minute), // токен истекает через 1 час
+			ExpiresAt: time.Now().Add(time.Duration(configs.AppSettings.AuthParams.JwtTtlMinutes * int(time.Minute))).Unix(), // токен истекает через 1 час
 			Issuer:    configs.AppSettings.AppParams.ServerName,
 		},
 	}

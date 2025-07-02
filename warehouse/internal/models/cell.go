@@ -6,3 +6,9 @@ type Cell struct {
 	Row        int    `json:"row"`
 	AdressCode string `json:"adress_code" db:"adress_code"`
 }
+
+type PostCell struct {
+	Zone       string `json:"zone"`
+	Row        int    `json:"row"`
+	AdressCode string `json:"adress_code" db:"adress_code"`
+}

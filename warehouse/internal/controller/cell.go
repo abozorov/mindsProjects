@@ -12,6 +12,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// CreateCell godoc
+// @Summary Создать ячейку
+// @Description Создается ячейка хранения в базе
+// @Tags cells
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param cell body models.PostCell true "Данные ячейки"
+// @Success 201 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Router /cells [post]
 func CreateCell(c *gin.Context) {
 	// парсим в JSON
 	var cell models.Cell
@@ -44,6 +56,18 @@ func CreateCell(c *gin.Context) {
 
 }
 
+// GetCellByID godoc
+// @Summary Получить ячейку по ID
+// @Description Возвращает ячейку по его ID
+// @Tags cells
+// @Security ApiKeyAuth
+// @Produce json
+// @Param id path int true "ID ячейки"
+// @Success 200 {object} models.Cell
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /cells/{id} [get]
 func GetCellByID(c *gin.Context) {
 	// достаем id
 	idStr := c.Param("id")
@@ -66,6 +90,16 @@ func GetCellByID(c *gin.Context) {
 
 }
 
+// GetAllCells godoc
+// @Summary Получить все ячейка
+// @Description Возвращает список всех ячеек хранения в бд
+// @Tags cells
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {array} models.Cell
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Router /cells [get]
 func GetAllCells(c *gin.Context) {
 	// достаем данные с бд
 	cells, err := service.GetAllCells()
@@ -78,6 +112,20 @@ func GetAllCells(c *gin.Context) {
 	c.JSON(http.StatusOK, cells)
 }
 
+// UpdateCellByID godoc
+// @Summary Изменить ячейки
+// @Description Изменение данных ячейки хранения
+// @Tags cells
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param id path int true "ID ячейки"
+// @Param cell body models.Cell true "ячейка"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /cells/{id} [patch]
 func UpdateCellByID(c *gin.Context) {
 	// достаем id
 	idStr := c.Param("id")

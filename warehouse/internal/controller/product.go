@@ -12,6 +12,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// CreateProduct godoc
+// @Summary Создать товар
+// @Description Создается товар в базе
+// @Tags products
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param user body models.PostProduct true "товар"
+// @Success 201 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Router /products [post]
 func CreateProduct(c *gin.Context) {
 	// парсим в JSON
 	var p models.Product
@@ -42,6 +54,18 @@ func CreateProduct(c *gin.Context) {
 
 }
 
+// GetProductByID godoc
+// @Summary Получить товар по ID
+// @Description Возвращает товар по его ID
+// @Tags products
+// @Security ApiKeyAuth
+// @Produce json
+// @Param id path int true "ID товара"
+// @Success 200 {object} models.Product
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /products/{id} [get]
 func GetProductByID(c *gin.Context) {
 	// достаем id
 	idStr := c.Param("id")
@@ -64,6 +88,16 @@ func GetProductByID(c *gin.Context) {
 
 }
 
+// GetAllProducts godoc
+// @Summary Получить все товары
+// @Description Возвращает список всех товаров в бд
+// @Tags products
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {array} models.Product
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Router /products [get]
 func GetAllProducts(c *gin.Context) {
 	// достаем данные с бд
 	products, err := service.GetAllProducts()
@@ -76,6 +110,20 @@ func GetAllProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, products)
 }
 
+// UpdateProductByID godoc
+// @Summary Изменить товар
+// @Description Изменение данных товара
+// @Tags products
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param id path int true "ID ячейки"
+// @Param operation body models.Product true "товар"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /products/{id} [patch]
 func UpdateProductByID(c *gin.Context) {
 	// достаем id
 	idStr := c.Param("id")

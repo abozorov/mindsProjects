@@ -6,8 +6,17 @@ import (
 	"warehouse/internal/controller"
 	"warehouse/internal/db"
 	"warehouse/logger"
+	_ "warehouse/docs"
 )
 
+// @title warehouse API
+// @version 1.0
+// @description API Server for warehouse Application
+// @securityDefinitions.apikey ApiKeyAuth
+// @host localhost:8080
+// @BasePath /
+// @in header
+// @name Authorization
 func main() {
 
 	// Load configs

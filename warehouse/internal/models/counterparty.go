@@ -7,3 +7,10 @@ type Counterparty struct {
 	Phone   string `json:"phone"`
 	Email   string `json:"email"`
 }
+
+type PostCounterparty struct {
+	Name    string `json:"name"`
+	Contact string `json:"contact"`
+	Phone   string `json:"phone"`
+	Email   string `json:"email"`
+}

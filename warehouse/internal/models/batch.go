@@ -3,9 +3,9 @@ package models
 import "time"
 
 type Batch struct {
-	ID               int       `json:"id"`       //
-	Date             time.Time `json:"Date"`     //
-	Type             string    `json:"type"`     //
+	ID               int       `json:"id"`                                       //
+	Date             time.Time `json:"Date"`                                     //
+	Type             string    `json:"type"`                                     //
 	CounterpartyName string    `json:"counterparty_name" db:"counterparty_name"` //
 	Contact          string    `json:"contact"`
 	Phone            string    `json:"phone"`
@@ -21,4 +21,12 @@ type Batch struct {
 	Role             string    `json:"role"`
 	FullName         string    `json:"full_name" db:"full_name"`
 	Active           bool      `json:"-"`
+}
+
+type PostBatch struct {
+	Type             string    `json:"type"`                                     //
+	CounterpartyName string    `json:"counterparty_name" db:"counterparty_name"` //
+	Article          string    `json:"article"` //
+	Quantity         int       `json:"quantity"` //
+	AdressCode       string    `json:"adress_code" db:"adress_code"` //
 }
