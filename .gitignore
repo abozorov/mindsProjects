@@ -26,4 +26,5 @@ vendor/
 *.pdf
 *.zip
 *.rar
-
+*.drawio
+*.bkp
