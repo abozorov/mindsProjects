@@ -8,11 +8,11 @@ import (
 
 func GetAllBatches() (batches []models.Batch, err error) {
 
-	err = db.GetDBConn().Select(&batches, `SELECT b.date, b.type,
-						cp.name AS counterparty_name, cp.contact, cp.phone, cp.email,
-						p.article, p.name AS product_name, p.price,
-						s.quantity,
-						c.zone, c.row, c.adress_code,
+	err = db.GetDBConn().Select(&batches, `
+					SELECT b.date, b.type, b.counterparty_name, b.article, b.quantity, b.adress_code,
+						cp.contact, cp.phone, cp.email,
+						p.name AS product_name, p.price,
+						c.zone, c.row,
 						u.username, u.role, u.full_name, u.active
 					FROM batches b
 					INNER JOIN counterparties cp ON b.counterparty_name = cp.name
@@ -32,11 +32,11 @@ func GetAllBatches() (batches []models.Batch, err error) {
 
 func GetBatchByID(id int) (batch models.Batch, err error) {
 
-	err = db.GetDBConn().Get(&batch, `SELECT b.id, b.date, b.type,
-						cp.name AS counterparty_name, cp.contact, cp.phone, cp.email,
-						p.article, p.name AS product_name, p.price,
-						s.quantity,
-						c.zone, c.row, c.adress_code,
+	err = db.GetDBConn().Get(&batch, `
+					SELECT b.date, b.type, b.counterparty_name, b.article, b.quantity, b.adress_code,
+						cp.contact, cp.phone, cp.email,
+						p.name AS product_name, p.price,
+						c.zone, c.row,
 						u.username, u.role, u.full_name, u.active
 					FROM batches b
 					INNER JOIN counterparties cp ON b.counterparty_name = cp.name
