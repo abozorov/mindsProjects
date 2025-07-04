@@ -26,21 +26,22 @@ import (
 // @Router /products [post]
 func CreateProduct(c *gin.Context) {
 	// парсим в JSON
-	var p models.Product
+	var postP models.PostProduct
 
-	if err := c.ShouldBindJSON(&p); err != nil {
+	if err := c.ShouldBindJSON(&postP); err != nil {
 		HandleError(c, err)
 		return
 	}
 
 	// проверяем валидации
-	if p.Article == "" {
+	if postP.Article == "" {
 		logger.Error.
 			Printf("[controller] CreateProduct(): article is not filled in: %s\n", errs.ErrBadRequestBody.Error())
 		err := errors.Join(errors.New("article is not filled in: "), errs.ErrBadRequestBody)
 		HandleError(c, err)
 		return
 	}
+	p := models.PostProductToProduct(postP)
 
 	// создаем
 	p, err := service.CreateProduct(p)
@@ -118,7 +119,7 @@ func GetAllProducts(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "ID ячейки"
-// @Param operation body models.Product true "товар"
+// @Param operation body models.PostProduct true "товар"
 // @Success 200 {object} map[string]string
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
@@ -135,12 +136,13 @@ func UpdateProductByID(c *gin.Context) {
 	}
 
 	// парсим в JSON
-	var p models.Product
+	var postP models.PostProduct
 
-	if err := c.ShouldBindJSON(&p); err != nil {
+	if err := c.ShouldBindJSON(&postP); err != nil {
 		HandleError(c, err)
 		return
 	}
+	p := models.PostProductToProduct(postP)
 
 	// пытаемся менять данные
 	if err = service.UpdateProductByID(id, p); err != nil {

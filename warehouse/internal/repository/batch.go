@@ -9,7 +9,7 @@ import (
 func GetAllBatches() (batches []models.Batch, err error) {
 
 	err = db.GetDBConn().Select(&batches, `
-					SELECT b.date, b.type, b.counterparty_name, b.article, b.quantity, b.adress_code,
+					SELECT b.id, b.date, b.type, b.counterparty_name, b.article, b.quantity, b.adress_code,
 						cp.contact, cp.phone, cp.email,
 						p.name AS product_name, p.price,
 						c.zone, c.row,
@@ -33,7 +33,7 @@ func GetAllBatches() (batches []models.Batch, err error) {
 func GetBatchByID(id int) (batch models.Batch, err error) {
 
 	err = db.GetDBConn().Get(&batch, `
-					SELECT b.date, b.type, b.counterparty_name, b.article, b.quantity, b.adress_code,
+					SELECT b.id, b.date, b.type, b.counterparty_name, b.article, b.quantity, b.adress_code,
 						cp.contact, cp.phone, cp.email,
 						p.name AS product_name, p.price,
 						c.zone, c.row,

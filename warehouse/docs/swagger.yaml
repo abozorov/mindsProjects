@@ -395,7 +395,7 @@ paths:
         name: cell
         required: true
         schema:
-          $ref: '#/definitions/models.Cell'
+          $ref: '#/definitions/models.PostCell'
       produces:
       - application/json
       responses:
@@ -548,7 +548,7 @@ paths:
         name: operation
         required: true
         schema:
-          $ref: '#/definitions/models.Counterparty'
+          $ref: '#/definitions/models.PostCounterparty'
       produces:
       - application/json
       responses:
@@ -701,7 +701,7 @@ paths:
         name: operation
         required: true
         schema:
-          $ref: '#/definitions/models.Product'
+          $ref: '#/definitions/models.PostProduct'
       produces:
       - application/json
       responses:

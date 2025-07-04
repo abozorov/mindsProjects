@@ -1,14 +1,25 @@
 package models
 
-type Cell struct {
+// type Cell struct {
+// 	ID         int    `json:"id"`
+// 	Zone       string `json:"zone"`
+// 	Row        int    `json:"row"`
+// 	AdressCode string `json:"adress_code" db:"adress_code"`
+// }
+
+type Cell struct{
 	ID         int    `json:"id"`
-	Zone       string `json:"zone"`
-	Row        int    `json:"row"`
-	AdressCode string `json:"adress_code" db:"adress_code"`
+	PostCell
 }
 
 type PostCell struct {
 	Zone       string `json:"zone"`
 	Row        int    `json:"row"`
 	AdressCode string `json:"adress_code" db:"adress_code"`
+}
+
+func PostCellToCell(postC PostCell) Cell {
+	return Cell{
+		PostCell: postC,
+	}
 }

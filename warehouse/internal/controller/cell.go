@@ -26,23 +26,24 @@ import (
 // @Router /cells [post]
 func CreateCell(c *gin.Context) {
 	// парсим в JSON
-	var cell models.Cell
+	var postC models.PostCell
 
-	if err := c.ShouldBindJSON(&cell); err != nil {
+	if err := c.ShouldBindJSON(&postC); err != nil {
 		HandleError(c, err)
 		return
 	}
 
 	// проверяем валидации
-	if cell.Zone == "" ||
-		cell.Row == 0 ||
-		cell.AdressCode == "" {
+	if postC.Zone == "" ||
+		postC.Row == 0 ||
+		postC.AdressCode == "" {
 		logger.Error.
 			Printf("[controller] CreateCell(): zone, row or adress code is not filled in: %s\n", errs.ErrBadRequestBody.Error())
 		err := errors.Join(errors.New("zone, row or adress code is not filled in: "), errs.ErrBadRequestBody)
 		HandleError(c, err)
 		return
 	}
+	cell := models.PostCellToCell(postC)
 
 	// создаем
 	cell, err := service.CreateCell(cell)
@@ -120,7 +121,7 @@ func GetAllCells(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "ID ячейки"
-// @Param cell body models.Cell true "ячейка"
+// @Param cell body models.PostCell true "ячейка"
 // @Success 200 {object} map[string]string
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
@@ -137,12 +138,13 @@ func UpdateCellByID(c *gin.Context) {
 	}
 
 	// парсим в JSON
-	var cell models.Cell
+	var postC models.PostCell
 
-	if err := c.ShouldBindJSON(&cell); err != nil {
+	if err := c.ShouldBindJSON(&postC); err != nil {
 		HandleError(c, err)
 		return
 	}
+	cell := models.PostCellToCell(postC)
 
 	// пытаемся менять данные
 	if err = service.UpdateCellByID(id, cell); err != nil {

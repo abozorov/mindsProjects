@@ -26,24 +26,24 @@ import (
 // @Router /batches [post]
 func CreateBatch(c *gin.Context) {
 	// парсинг из json
-	var b models.Batch
-	if err := c.ShouldBindJSON(&b); err != nil {
+	var postB models.PostBatch
+	if err := c.ShouldBindJSON(&postB); err != nil {
 		HandleError(c, err)
 		return
 	}
 
 	// проверка валидаций
-	if (b.Type != "in" && b.Type != "out") ||
-		!b.Date.IsZero() ||
-		b.CounterpartyName == "" ||
-		b.Article == "" ||
-		b.Quantity <= 0 {
+	if (postB.Type != "in" && postB.Type != "out") ||
+		postB.CounterpartyName == "" ||
+		postB.Article == "" ||
+		postB.Quantity <= 0 {
 		logger.Error.
 			Printf("[controller] CreateBatch(): one or more fields are filled in incorrectly: %s\n", errs.ErrBadRequestBody.Error())
 		err := errors.Join(errors.New("one or more fields are filled in incorrectly"), errs.ErrBadRequestBody)
 		HandleError(c, err)
 		return
 	}
+	b := models.PostBatchToBatch(postB)
 	b.Username = c.GetString(userUsernameCtx)
 
 	// попытка протолкнуть в сервис

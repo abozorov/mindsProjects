@@ -26,17 +26,17 @@ import (
 // @Router /counterparties [post]
 func CreateCounterparty(c *gin.Context) {
 	// парсим в JSON
-	var cp models.Counterparty
-	if err := c.ShouldBindJSON(&cp); err != nil {
+	var postCp models.PostCounterparty
+	if err := c.ShouldBindJSON(&postCp); err != nil {
 		HandleError(c, err)
 		return
 	}
 
 	// проверяем валидации
-	if cp.Name == "" ||
-		cp.Contact == "" ||
-		cp.Phone == "" ||
-		cp.Email == "" {
+	if postCp.Name == "" ||
+		postCp.Contact == "" ||
+		postCp.Phone == "" ||
+		postCp.Email == "" {
 		logger.Error.
 			Printf("[controller] CreateCounterparty(): type in not provider/recipient or name, contact, phone or email is not filled: %s\n",
 				errs.ErrBadRequestBody.Error(),
@@ -47,6 +47,7 @@ func CreateCounterparty(c *gin.Context) {
 		HandleError(c, err)
 		return
 	}
+	cp := models.PostCounterpartyToCounterparty(postCp)
 
 	// создаем
 	cp, err := service.CreateCounterparty(cp)
@@ -122,7 +123,7 @@ func GetAllCounterparties(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "ID контрагента"
-// @Param operation body models.Counterparty true "контрагент"
+// @Param operation body models.PostCounterparty true "контрагент"
 // @Success 200 {object} map[string]string
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
@@ -139,11 +140,12 @@ func UpdateCounterpartyByID(c *gin.Context) {
 	}
 
 	// парсим в JSON
-	var cp models.Counterparty
-	if err = c.ShouldBindJSON(&cp); err != nil {
+	var PostCp models.PostCounterparty
+	if err = c.ShouldBindJSON(&PostCp); err != nil {
 		HandleError(c, err)
 		return
 	}
+	cp := models.PostCounterpartyToCounterparty(PostCp)
 
 	// пытаемся менять данные
 	if err = service.UpdateCounterpartyByID(id, cp); err != nil {

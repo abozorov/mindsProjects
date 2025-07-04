@@ -394,7 +394,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Cell"
+                            "$ref": "#/definitions/models.PostCell"
                         }
                     }
                 ],
@@ -633,7 +633,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Counterparty"
+                            "$ref": "#/definitions/models.PostCounterparty"
                         }
                     }
                 ],
@@ -872,7 +872,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/models.PostProduct"
                         }
                     }
                 ],
